@@ -1,0 +1,97 @@
+<div>
+    <div class="columns">
+        <div class="column is-two-thirds">
+            <div class="field">
+                <label class="label">Category</label>
+                <div class="control">
+                    <div class="select">
+                    <select unicorn:model.defer="speciality">
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}">{{ cat.title }}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-link" unicorn:click="movies_search_button">Search</button>
+            </div>
+            {% if movies_search_flag %}
+            <div class="control">
+                <button class="button is-link is-light" unicorn:click="$reset">Restore</button>
+            </div>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if page.object_list %}
+
+    <div class="table-container">
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                <th><abbr title="Title">Title</abbr></th>
+                <th><abbr title="Genre">Genre</abbr></th>
+                <th><abbr title="Year">Year</abbr></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                <th><abbr title="Title">Title</abbr></th>
+                <th><abbr title="Genre">Genre</abbr></th>
+                <th><abbr title="Year">Year</abbr></th>
+                </tr>
+            </tfoot>
+            <tbody>
+            {% for i in page.object_list %}
+                <tr>
+                <th>{{ i.title }}</th>
+                <td>{{ i.genre }}</td>
+                <td>{{ i.year }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if page.paginator.num_pages > 1 %}
+        <nav class="pagination" role="navigation" aria-label="pagination">
+        {% if page.has_previous %}
+            <a class="pagination-previous" unicorn:click="go_to_page({{ page.previous_page_number }})">Previous</a>
+        {% else %}
+            <a class="pagination-previous" disabled>Previous</a>
+        {% endif %}
+        {% if page.has_next %}
+            <a class="pagination-next" unicorn:click="go_to_page({{ page.next_page_number }})">Next page</a>
+        {% else %}
+            <a class="pagination-next" disabled>Next page</a>
+        {% endif %}
+        <ul class="pagination-list">
+            {% for i in page_range|default_if_none:page.paginator.get_elided_page_range %}
+                {% if page.number == i %}
+                    <li>
+                        <a class="pagination-link is-current" aria-label="Page {{ i }}" aria-current="page">{{ i }}</a>
+                    </li>
+                {% else %}
+                    {% if i == page.paginator.ELLIPSIS %}
+                        <li>
+                            <span class="pagination-ellipsis">{{ i }}</span>
+                        </li>
+                    {% else %}
+                        <a class="pagination-link" unicorn:click="go_to_page({{ i }})" aria-label="Page {{ i }}" aria-current="page">{{ i }}</a>
+                    </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+        </nav>
+    {% endif %}
+    {% else %}
+        <div class="notification is-danger is-light">
+        {% comment %} <button class="delete"></button> {% endcomment %}
+        No results found.
+        </div>
+    {% endif %}
+</div>
