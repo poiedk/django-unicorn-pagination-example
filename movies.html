@@ -5,7 +5,7 @@
                 <label class="label">Category</label>
                 <div class="control">
                     <div class="select">
-                    <select unicorn:model.defer="speciality">
+                    <select unicorn:model.defer="category">
                         {% for cat in categories %}
                             <option value="{{ cat.id }}">{{ cat.title }}</option>
                         {% endfor %}
